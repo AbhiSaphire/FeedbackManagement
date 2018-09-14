@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<conio.h>
 #define COUNT 10
 
 struct response
@@ -23,31 +24,51 @@ struct response *insert(struct response *listofresponse);
 struct response *delatposition(struct response *listofresponse, char item []);
 void *search(struct response *listofresponse, char item[]);
 struct response *modify(struct response *listofresponse, char item[]);
-struct response *starTree(struct response *listofresponse);
+//struct response *starTree(struct response *listofresponse);
 
 //MINOR FUNCTIONS.....
 struct response *sortbystars(struct response *listofresponse);
 struct response *sortbytitle(struct response *listofresponse);
-void print2D(struct response *listofresponse);
-void print2DUtil(struct response *listofresponse, int space);
-void searchroot(struct response *listofresponse, int id);
-/*
+//void print2D(struct response *listofresponse);
+//void print2DUtil(struct response *listofresponse, int space);
+//void searchroot(struct response *listofresponse, int id);
+
 struct response *acceptDate(struct response *temp){
     printf("\n\t\tEnter date of submission (DD/MM/YYYY): ");
-    scanf("%[^\n]s",(temp->date));
+    scanf(" %[^\n]s",(temp->date));
     if(strlen(temp->date) != 10){
         printf("\n\t\tDate entered is wrong!!");
         acceptDate(temp);
     }
     return temp;
 }
-*/
 void header(){
-    printf("\t\t******************************************\n");
-    printf("\t\t******************************************\n");
-    printf("\t\t**\tFEEDBACK MANAGEMENT SYSTEM\t**\n");
-    printf("\t\t******************************************\n");
-    printf("\t\t******************************************\n");
+    printf("\n");
+    printf("\t\t\t\t******************************************\n");
+    printf("\t\t\t\t******************************************\n");
+    printf("\t\t\t\t**\tFEEDBACK MANAGEMENT SYSTEM\t**\n");
+    printf("\t\t\t\t******************************************\n");
+    printf("\t\t\t\t******************************************\n");
+}
+
+void AccessGrant(){
+    char ch=20,a[8]={0,0,0,0,0,0,0,0},password[8]={'A','b','h','i','s','h','e','k'};
+    int i=0;
+    printf("\n\t\tEnter password:  ");
+    while (ch!=13){
+        ch = getch();
+        if(ch==13)
+            break;
+        a[i]=ch;
+        printf("*");
+        i++;
+    }
+    if(a[0]==password[0] && a[1]==password[1] && a[2]==password[2] && a[3]==password[3] && a[4]==password[4] && a[5]==password[5] && a[6]==password[6] && a[7]==password[7])
+        printf("\n\t\t\t\tACCESS GRANTED\t\t\t   WELCOME\n");
+    else{
+        printf("\n\t\tWRONG PASSWORD\tEXITING...");
+        exit(0);
+    }
 }
 
 int i,n;
@@ -57,6 +78,7 @@ int main(){
     char item[50];
     int ch;
     struct response *listofresponse = NULL;
+    AccessGrant();
     header();
 
     while(1){
@@ -78,7 +100,7 @@ int main(){
             break;
         case 5:
             printf("\n\t\tEnter title you want to delete:");
-            scanf("%[^\n]s",item);
+            scanf(" %[^\n]s",item);
             listofresponse=delatposition(listofresponse,item);
             break;
         case 6:
@@ -86,16 +108,16 @@ int main(){
             break;
         case 7:
             printf("\n\t\tEnter title you want to search:");
-            scanf("%[^\n]s",item);
+            scanf(" %[^\n]s",item);
             search(listofresponse,item);
             break;
         case 8:
             printf("\n\t\tEnter title you want to modify:");
-            scanf("%[^\n]s",item);
+            scanf(" %[^\n]s",item);
             listofresponse=modify(listofresponse,item);
             break;
         case 9:
-            starTree(listofresponse);
+            //starTree(listofresponse);
             break;
         default:
             printf("\n\t\tERROR!\n");
@@ -108,19 +130,19 @@ struct response *create(struct response *listofresponse)
 {
     struct response *p,*temp;
 
-    printf("\t\tEnter number of responses:");
+    printf("\n\t\tEnter number of responses:");
     scanf("%d",&n);
     for(i=0;i<n;i++){
        temp=(struct response *)malloc(sizeof(struct response));
-       printf("\n\t\tEnter title name to review: ");
-       scanf("%[^\n]s", temp->title);
+       printf("\n\n\t\tEnter title name to review: ");
+       scanf(" %[^\n]s", temp->title);
        printf("\n\t\tEnter your name: ");
-       scanf("%[^\n]s",(temp->name));
-       //temp = acceptDate(temp);
+       scanf(" %[^\n]s",(temp->name));
+       temp = acceptDate(temp);
        printf("\n\t\tReview by stars(1-100): ");
        scanf("%d",&(temp->stars));
        printf("\n\t\tEnter your Response / Feedback: ");
-       scanf("%[^\n]s",(temp->response));
+       scanf(" %[^\n]s",(temp->response));
 
        if(listofresponse == NULL){
             listofresponse = temp;
@@ -147,11 +169,11 @@ void display (struct response *listofresponse)
        return;
    }
   p=listofresponse;
-  printf("%15s%15s%10s\t%d\t%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
-  printf("\n------------------------------------------------------------------------");
+  printf("\n%20s%20s%20s\t%s\t%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
+  printf("\n----------------------------------------------------------------------------------------------------------------------------");
   while(p!=NULL)
     {
-        printf("\n\t%s\t\t%s\t\t%s\t\t%d\t\t%s",p->title, p->name, p->date, p->stars,p->response);
+        printf("\n%20s%20s%20s\t%d%40s\n",p->title, p->name, p->date, p->stars, p->response);
         p=p->link;
 
     }
@@ -167,14 +189,14 @@ struct response *insert(struct response *listofresponse)
 
     if(pos==1)
       { printf("\n\t\tEnter title name to review: ");
-        scanf("%[^\n]s",(temp->title));
+        scanf(" %[^\n]s",(temp->title));
         printf("\n\t\tEnter your name: ");
-        scanf("%[^\n]s",(temp->name));
-        //temp=acceptDate(temp);
+        scanf(" %[^\n]s",(temp->name));
+        temp=acceptDate(temp);
         printf("\n\t\tReview %s by stars(1-100): ",temp->title);
         scanf("%d",&(temp->stars));
         printf("\n\t\tEnter your Response / Feedback: ");
-        scanf("%[^\n]s",(temp->response));
+        scanf(" %[^\n]s",(temp->response));
         temp->link = listofresponse;
         listofresponse = temp;
 
@@ -188,14 +210,14 @@ struct response *insert(struct response *listofresponse)
 
     else
     {   printf("\n\t\tEnter title name to review: ");
-        scanf("%[^\n]s",(temp->title));
+        scanf(" %[^\n]s",(temp->title));
         printf("\n\t\tEnter your name: ");
-        scanf("%[^\n]s",(temp->name));
-        //temp=acceptDate(temp);
+        scanf(" %[^\n]s",(temp->name));
+        temp=acceptDate(temp);
         printf("\n\t\tReview %s by stars(1-100): ",temp->title);
         scanf("%d",&(temp->stars));
         printf("\n\t\tEnter your Response / Feedback: ");
-        scanf("%[^\n]s",(temp->response));
+        scanf(" %[^\n]s",(temp->response));
         temp->link=p->link;
         p->link=temp;
     }
@@ -215,7 +237,6 @@ struct response *del(struct response *listofresponse)
 struct response *delatposition(struct response *listofresponse,char item[])
 {
   struct response *temp,*p;
-
   if(strcmp(listofresponse->title,item)==0)
   {
       temp=listofresponse;
@@ -325,9 +346,9 @@ void *search(struct response *listofresponse,char item[])
        p=listofresponse;
        if(strcmp(p->title,item) == 0){
            printf("\n\t\tITEM FOUND\n");
-           printf("%15s%15s%10s%3d%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
-           printf("------------------------------------------------------------------------");
-           printf("%15s%15s%10s%3d%40s",p->title, p->name, p->date, p->stars, p->response);
+           printf("\n%20s%20s%20s\t%s\t%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
+           printf("\n------------------------------------------------------------------------");
+           printf("\n%20s%20s%20s\t%d\t%40s",p->title, p->name, p->date, p->stars, p->response);
            flag = 1;
        }
        while(p->link!=NULL)
@@ -335,9 +356,9 @@ void *search(struct response *listofresponse,char item[])
             if(strcmp(p->link->title,item)==0)
           {
             printf("\n\t\tITEM FOUND\n");
-            printf("%15s%15s%10s%3d%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
-            printf("------------------------------------------------------------------------");
-            printf("%15s%15s%10s%3d%40s",p->title, p->name, p->date, p->stars, p->response);
+            printf("\n%20s%20s%20s\t%s\t%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
+            printf("\n------------------------------------------------------------------------");
+            printf("\n%20s%20s%20s\t%d\t%40s",p->link->title, p->link->name, p->link->date, p->link->stars, p->link->response);
             flag = 1;
           }
           p=p->link;
@@ -357,9 +378,9 @@ struct response *modify(struct response *listofresponse,char item[])
     p=listofresponse;
     if(strcpy(p->title, item)==0){
         printf("\n\t\tITEM FOUND\n");
-        printf("%15s%15s%10s%3d%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
-        printf("------------------------------------------------------------------------");
-        printf("%15s%15s%10s%3d%40s",p->title, p->name, p->date, p->stars, p->response);
+        printf("\n%20s%20s%20s\t%s\t%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
+        printf("\n------------------------------------------------------------------------");
+        printf("\n%20s%20s%20s\t%d\t%40s",p->title, p->name, p->date, p->stars, p->response);
         do
         {
             printf("\n\t\tEnter choice:\n 1)MODIFY TITLE NAME\n 2)MODIFY STARS GIVEN\n 3)MODIFY YOUR NAME\n 4)MODIFY FEEDBACK / RESPONSE  ");
@@ -370,7 +391,7 @@ struct response *modify(struct response *listofresponse,char item[])
             case 1:
                 printf("\n\t\tCURRENT TITLE NAME IS %s", p->title);
                 printf("\n\t\tEnter new title name: ");
-                scanf("%[^\n]s",(p->title));
+                scanf(" %[^\n]s",(p->title));
                 break;
             case 2:
                 printf("\n\t\tCURRENT NUMBER OF STARS GIVEN TO %s", p->title);
@@ -380,13 +401,13 @@ struct response *modify(struct response *listofresponse,char item[])
             case 3:
                 printf("\n\t\tCURRENT NAME IS ", p->name);
                 printf("\n\t\tEnter new name: ");
-                scanf("%[^\n]s",(p->name));
+                scanf(" %[^\n]s",(p->name));
             case 4:
                 printf("\n\t\tEnter new Feedback for %s: ", p->title);
-                scanf("%[^\n]s",(p->response));
+                scanf(" %[^\n]s",(p->response));
             default:    printf("\n\t\tWRONG CHOICE");
            }
-            printf("press 1 to continue modifying:");
+            printf("\n\n\t\tPRESS 1 TO CONTINUE MODIFICATION... ");
             scanf("%d",&chw);
         }while(chw==1);
 
@@ -399,9 +420,9 @@ struct response *modify(struct response *listofresponse,char item[])
             if(strcmp(p->link->title,item)==0)
             {
                 printf("\n\t\tITEM FOUND\n");
-                printf("%15s%15s%10s%3d%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
-                printf("------------------------------------------------------------------------");
-                printf("%15s%15s%10s%3d%40s",p->title, p->name, p->date, p->stars, p->response);
+                printf("\n%20s%20s%20s\t%s\t%40s", "TITLE", "NAME", "DATE", "STARS", "RESPONSE");
+                printf("\n------------------------------------------------------------------------");
+                printf("\n%20s%20s%20s\t%d\t%40s",p->title, p->name, p->date, p->stars, p->response);
                 do
                 {
                     printf("\n\t\tEnter choice:\n 1)MODIFY TITLE NAME\n 2)MODIFY STARS GIVEN\n 3)MODIFY YOUR NAME\n 4)MODIFY FEEDBACK / RESPONSE  ");
@@ -412,7 +433,7 @@ struct response *modify(struct response *listofresponse,char item[])
                         case 1:
                             printf("\n\t\tCURRENT TITLE NAME IS %s", p->title);
                             printf("\n\t\tEnter new title name: ");
-                            scanf("%[^\n]s",(p->title));
+                            scanf(" %[^\n]s",(p->title));
                             break;
                         case 2:
                             printf("\n\t\tCURRENT NUMBER OF STARS GIVEN TO %s", p->title);
@@ -422,13 +443,15 @@ struct response *modify(struct response *listofresponse,char item[])
                         case 3:
                             printf("\n\t\tCURRENT NAME IS ", p->name);
                             printf("\n\t\tEnter new name: ");
-                            scanf("%[^\n]s",(p->name));
+                            scanf(" %[^\n]s",(p->name));
+                            break;
                         case 4:
                             printf("\n\t\tEnter new Feedback for %s: ", p->title);
-                            scanf("%[^\n]s",(p->response));
+                            scanf(" %[^\n]s",(p->response));
+                            break;
                         default:    printf("\n\t\tWRONG CHOICE");
                     }
-                    printf("press 1 to continue modifying:");
+                    printf("\n\n\t\tPRESS 1 TO CONTINUE MODIFICATION... ");
                     scanf("%d",&chw);
 
                 }while(chw==1);
@@ -440,10 +463,7 @@ struct response *modify(struct response *listofresponse,char item[])
         if(flag == 0)
         printf("\n\n\t\tNOT FOUND!");
 }
-
-------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------
-
+/*
 void starTree(struct response *listofresponse){
     int mid, low=0, high=1;
     struct response *temp = listofresponse;
@@ -489,3 +509,4 @@ void print2D(struct response *root)
 {
    print2DUtil(root, 0);
 }
+*/
